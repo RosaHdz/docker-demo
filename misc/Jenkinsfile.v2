@@ -1,5 +1,8 @@
 node {
    def commit_id
+   environment {
+        HOME = '.'
+    }
    stage('Preparation') {
      checkout scm
      sh "git rev-parse --short HEAD > .git/commit-id"
@@ -9,8 +12,7 @@ node {
      def myTestContainer = docker.image('node:latest')
      myTestContainer.pull()
      myTestContainer.inside {
-       sh 'npm install --only=dev'       
-       sh 'chown -R 112:117 "/.npm"'
+       sh 'npm install --only=dev'
        sh 'npm test'
      }
    }
